@@ -32,7 +32,8 @@ import <Foundation/CPObject.j>
     [playlistsView setDelegate:self];
     
     var itemPrototype = [[CPCollectionViewItem alloc] init];
-    [itemPrototype setView:[[PlaylistView alloc] init]];
+    // [itemPrototype setView:[[PlaylistView alloc] init]];
+	[itemPrototype setView:[[PlaylistView alloc] initWithFrame:CGRectMakeZero()]];
     [playlistsView setItemPrototype:itemPrototype];
     [navigationArea addSubview:playlistsView];
 
@@ -82,7 +83,8 @@ import <Foundation/CPObject.j>
     {
 		console.log("before _textField alloc") ;
 	
-        _textField = [[CPTextField alloc] initWithFrame:CGRectMake(15.0, 15.0, 15.0, 20.0)];
+        // _textField = [[CPTextField alloc] initWithFrame:CGRectMake(15.0, 15.0, 15.0, 20.0)];
+		_textField = [[CPTextField alloc] initWithFrame:CGRectMake (0.0, 0.0, 150.0, 20.0)];
         
         [_textField setFont:[CPFont boldSystemFontOfSize:12.0]];
         [self addSubview:_textField];
