@@ -32,12 +32,11 @@
 {
     [super setSelectionIndexes:anIndexSet] ;
     new_index = [anIndexSet firstIndex] ;
+}
 
-    // get the current object meta datas
-    currentObject = [_content objectAtIndex:new_index] ;
-    metadata = [currentObject objectAtIndex:1] ;
-
-    [_metadataView setStringValue:metadata] ;
+- (id)getCurrentObject
+{
+    return [_content objectAtIndex:[self getSelectedIndex]] ;
 }
 
 - (int)getSelectedIndex
@@ -69,9 +68,7 @@
         [_textField setFont:[CPFont boldSystemFontOfSize:12.0]];
         [self addSubview:_textField];
     }
-    
-    // _playlists = [self collectionView] ;
-    
+        
     [_textField setStringValue:anObject[0]];
 }
 

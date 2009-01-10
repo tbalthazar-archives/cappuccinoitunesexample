@@ -17,6 +17,15 @@ var playlists = [
 @implementation AppController : CPObject
 {
     // CPArray playlists ;
+    CPView _metadataView ;
+}
+
+- (void)collectionViewDidChangeSelection:(CPCollectionView)collectionView
+{
+    currentObject = [collectionView getCurrentObject] ;
+    metadata = [currentObject objectAtIndex:1]
+    
+    [_metadataView setStringValue:metadata] ;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -42,9 +51,6 @@ var playlists = [
     var playlistsView = [[PlaylistsView alloc] initWithFrame:navBounds] ;
     [playlistsView setDelegate:self] ;
     
-    //     var itemPrototype = [[CPCollectionViewItem alloc] init];
-    // [itemPrototype setView:[[PlaylistView alloc] initWithFrame:CGRectMakeZero()]];
-    //     [playlistsView setItemPrototype:itemPrototype];
     [navigationArea addSubview:playlistsView];
 
     [playlistsView setContent:playlists];
@@ -60,12 +66,12 @@ var playlists = [
     // Autoresizing Mask
     [metaDataArea setAutoresizingMask:CPViewMinYMargin | CPViewMaxXMargin];
     
-    var metadataView = [[MetadataView alloc] initWithFrame:[metaDataArea bounds]] ;
+    _metadataView = [[MetadataView alloc] initWithFrame:[metaDataArea bounds]] ;
 
     currentPlaylistIndex = [playlistsView getSelectedIndex] ;
-	[metadataView setStringValue:playlists[currentPlaylistIndex][1]];
-    [metaDataArea addSubview:metadataView];
-    [playlistsView addMetadataView:metadataView];
+	[_metadataView setStringValue:playlists[currentPlaylistIndex][1]];
+    [metaDataArea addSubview:_metadataView];
+    [playlistsView addMetadataView:_metadataView];
     [contentView addSubview:metaDataArea];
 
 
