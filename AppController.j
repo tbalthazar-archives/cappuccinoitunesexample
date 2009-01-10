@@ -1,14 +1,25 @@
 
 import <Foundation/CPObject.j>
 
+var playlists = [
+    [   @"Jazz",
+        @"Jazz Meta Infos",
+        [@"So What", @"Feddie Freeloader", @"All Blue"]  ],
+        
+    [   @"Pop",
+        @"Pop Meta Infos",
+        [@"Big Mouth Strikes Again", @"The Magnificent Seven", @"First We Take Manhattan"]  ]
+] ;
 
 @implementation AppController : CPObject
 {
-	CPArray playlists ;
+    // CPArray playlists ;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
+    CPLog(playlists[0][0]) ;
+    
     var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
     
@@ -37,13 +48,8 @@ import <Foundation/CPObject.j>
     [playlistsView setItemPrototype:itemPrototype];
     [navigationArea addSubview:playlistsView];
 
-    playlists = [
-				@"Jazz",
-				@"Pop",
-				@"Recently added"
-			]
-
     [playlistsView setContent:playlists];
+    [playlistsView setSelectionIndexes:[[CPIndexSet alloc] initWithIndex:0] ] ;
 	// end creating the playlists
 
 
@@ -53,6 +59,17 @@ import <Foundation/CPObject.j>
     
     // Autoresizing Mask
     [metaDataArea setAutoresizingMask:CPViewMinYMargin | CPViewMaxXMargin];
+    
+    var metadataView = [[MetadataView alloc] initWithFrame:[metaDataArea bounds]] ;
+    // var metadataView = [[MetadataView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)] ;
+    // [creditsText setFont: [CPFont boldSystemFontOfSize: 11.0]];
+
+    currentPlaylistIndex = [[playlistsView selectionIndexes] firstIndex] ;
+    CPLog("current index : " + currentPlaylistIndex) ;
+	[metadataView setStringValue:playlists[currentPlaylistIndex][1]];
+    [metaDataArea addSubview:metadataView];
+    // [contentView addSubview:creditsView];
+	
     
     [contentView addSubview:metaDataArea];
 
@@ -77,11 +94,11 @@ import <Foundation/CPObject.j>
 
 - (void)setRepresentedObject:(id)anObject
 {    
-	console.log("start setRepresentedObject") ;
+	CPLog("start setRepresentedObject") ;
 	
     if (!_textField)
     {
-		console.log("before _textField alloc") ;
+        CPLog("setRepresentedObject" + anObject[0]) ;
 	
         // _textField = [[CPTextField alloc] initWithFrame:CGRectMake(15.0, 15.0, 15.0, 20.0)];
 		_textField = [[CPTextField alloc] initWithFrame:CGRectMake (0.0, 0.0, 150.0, 20.0)];
@@ -90,7 +107,7 @@ import <Foundation/CPObject.j>
         [self addSubview:_textField];
     }
     
-    [_textField setStringValue:anObject];
+    [_textField setStringValue:anObject[0]];
 
 	console.log("_textField string value : "+[_textField stringValue]) ;
 }
@@ -99,6 +116,35 @@ import <Foundation/CPObject.j>
 {
     [self setBackgroundColor:isSelected ? [CPColor blueColor] : nil];
     [_textField setTextColor:isSelected ? [CPColor whiteColor] : [CPColor blackColor]];
+}
+
+@end
+
+
+@implementation MetadataView : CPView
+{
+    CPTextField _textField ;
+}
+
+- (id)initWithFrame:(CGRect)aFrame // color:(CPColor)color
+{
+    CPLog("MetadataView : initWithFrame") ;
+    self = [super initWithFrame:aFrame];
+    if(self)
+    {
+		var bounds = [self bounds];
+		_textField = [[CPTextField alloc] initWithFrame:bounds];
+        [_textField setFont:[CPFont boldSystemFontOfSize:12.0]];
+        [_textField setTextColor:[CPColor blackColor]];
+		[_textField setLineBreakMode:CPLineBreakByTruncatingTail];
+        [self addSubview:_textField];
+	}
+	return self;
+}
+
+- (void)setStringValue:(CPString)stringValue 
+{
+	[_textField setStringValue:stringValue];
 }
 
 @end
