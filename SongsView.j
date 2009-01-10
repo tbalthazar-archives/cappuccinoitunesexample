@@ -1,6 +1,4 @@
-
-
-@implementation PlaylistsPane : CPCollectionView
+@implementation SongsPane : CPCollectionView
 {
     CPCollectionViewItem _itemPrototype ;
 }
@@ -11,21 +9,16 @@
     if (self)
     {
         [self setAutoresizingMask:CPViewWidthSizable];
-        [self setMinItemSize:CGSizeMake(100, 20)];
-        [self setMaxItemSize:CGSizeMake(100, 20)];
+        [self setMinItemSize:CGSizeMake(150, 20)];
+        [self setMaxItemSize:CGSizeMake(300, 20)];
         
         _itemPrototype = [[CPCollectionViewItem alloc] init];
-    	[_itemPrototype setView:[[PlaylistView alloc] initWithFrame:CGRectMakeZero()]];
+    	[_itemPrototype setView:[[SongView alloc] initWithFrame:CGRectMakeZero()]];
         [self setItemPrototype:_itemPrototype];
     }
 
     return self;
 }
-
-// - (void)setDelegate:(id)aDelegate
-// { 
-//     [super setDelegate:aDelegate];
-// }
 
 - (void) setSelectionIndexes:(CPIndexSet)anIndexSet
 {
@@ -46,28 +39,28 @@
 @end
 
 
-@implementation PlaylistView : CPView
+@implementation SongView : CPView
 {
     CPTextField _textField;
 }
 
 - (void)setRepresentedObject:(id)anObject
 {    
-	
     if (!_textField)
     {
-		_textField = [[CPTextField alloc] initWithFrame:CGRectMake (0.0, 0.0, 150.0, 20.0)];
+		_textField = [[CPTextField alloc] initWithFrame:CGRectMake (0.0, 0.0, 350.0, 20.0)];
         
         [_textField setFont:[CPFont boldSystemFontOfSize:12.0]];
         [self addSubview:_textField];
     }
         
-    [_textField setStringValue:anObject[0]];
+    new_value = anObject ;
+    [_textField setStringValue:new_value];
 }
 
 - (void)setSelected:(BOOL)isSelected
 {
-    [self setBackgroundColor:isSelected ? [CPColor blueColor] : nil];
+    [self setBackgroundColor:isSelected ? [CPColor greenColor] : nil];
     [_textField setTextColor:isSelected ? [CPColor whiteColor] : [CPColor blackColor]];
 }
 
