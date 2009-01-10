@@ -1,9 +1,8 @@
 
 
-@implementation PlaylistsView : CPCollectionView
+@implementation PlaylistsPane : CPCollectionView
 {
     CPCollectionViewItem _itemPrototype ;
-    CPView _metadataView ;
 }
 
 - (id)initWithFrame:(CGRect)aFrame
@@ -44,11 +43,6 @@
     return [[self selectionIndexes] firstIndex] ;
 }
 
-- (void)addMetadataView:(CPView)aMetadataView
-{
-    _metadataView = aMetadataView ;
-}
-
 @end
 
 
@@ -76,7 +70,6 @@
 {
     [self setBackgroundColor:isSelected ? [CPColor blueColor] : nil];
     [_textField setTextColor:isSelected ? [CPColor whiteColor] : [CPColor blackColor]];
-    // CPLog([_playlists getSelectedIndex] + " is selected") ;
 }
 
 @end

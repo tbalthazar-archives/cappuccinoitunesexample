@@ -2,6 +2,7 @@
 import <Foundation/CPObject.j>
 
 import "PlaylistsView.j"
+import "PlaylistsController.j"
 import "MetadataView.j"
 
 var playlists = [
@@ -16,16 +17,6 @@ var playlists = [
 
 @implementation AppController : CPObject
 {
-    // CPArray playlists ;
-    CPView _metadataView ;
-}
-
-- (void)collectionViewDidChangeSelection:(CPCollectionView)collectionView
-{
-    currentObject = [collectionView getCurrentObject] ;
-    metadata = [currentObject objectAtIndex:1]
-    
-    [_metadataView setStringValue:metadata] ;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -35,48 +26,45 @@ var playlists = [
     
     [contentView setBackgroundColor:[CPColor colorWithCalibratedRed:255.0/255.0 green:254.0/255.0 blue:252.0/255.0 alpha:1.0]];
     
+    
+    // -- create the playlist controller
+    var playlistController = [[PlaylistsController alloc] init] ;
+    
+    
+    // --- create the navigation area
     var navigationArea = [[CPView alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0, CGRectGetHeight([contentView bounds]) - 150.0)];
-    
-    [navigationArea setBackgroundColor:[CPColor redColor]];
-    
-    // Autoresizing Mask
+    [navigationArea setBackgroundColor:[CPColor redColor]];    
     [navigationArea setAutoresizingMask:CPViewHeightSizable | CPViewMaxXMargin];
-    
     [contentView addSubview:navigationArea];
 
 
-    // ----------------------------
-	// start creating the playlists
-	var navBounds = [navigationArea bounds] ;
-    var playlistsView = [[PlaylistsView alloc] initWithFrame:navBounds] ;
-    [playlistsView setDelegate:self] ;
-    
-    [navigationArea addSubview:playlistsView];
-
-    [playlistsView setContent:playlists];
-    [playlistsView setSelectionIndexes:[[CPIndexSet alloc] initWithIndex:0] ] ;
-	// end creating the playlists
+	// --- create the playlists
+	var navBounds       = [navigationArea bounds] ;
+    var playlistsPane   = [[PlaylistsPane alloc] initWithFrame:navBounds] ;
+    [playlistsPane setDelegate:playlistController] ;    
+    [navigationArea addSubview:playlistsPane];
+    [playlistsPane setContent:playlists];
+    [playlistsPane setSelectionIndexes:[[CPIndexSet alloc] initWithIndex:0] ] ;
 
 
-    // ----------------------------
-    // metaData area
+    // --- create the metadata area
     var metaDataArea = [[CPView alloc] initWithFrame:CGRectMake(0.0, CGRectGetMaxY([navigationArea frame]), 150.0, 150.0)];
-    [metaDataArea setBackgroundColor:[CPColor greenColor]];	
-    
-    // Autoresizing Mask
+    [metaDataArea setBackgroundColor:[CPColor greenColor]];	    
     [metaDataArea setAutoresizingMask:CPViewMinYMargin | CPViewMaxXMargin];
     
-    _metadataView = [[MetadataView alloc] initWithFrame:[metaDataArea bounds]] ;
-
-    currentPlaylistIndex = [playlistsView getSelectedIndex] ;
-	[_metadataView setStringValue:playlists[currentPlaylistIndex][1]];
-    [metaDataArea addSubview:_metadataView];
-    [playlistsView addMetadataView:_metadataView];
+    
+    // --- create the metadata view
+    var metadataView = [[MetadataView alloc] initWithFrame:[metaDataArea bounds]] ;
+    [metaDataArea addSubview:metadataView];
     [contentView addSubview:metaDataArea];
+    [playlistController setMetadataView:metadataView] ;
+    
+    // --- select a playlist by default -> will also populate the metadata view
+    [playlistsPane setSelectionIndexes:[[CPIndexSet alloc] initWithIndex:0] ] ;    
+    
 
 
-    // ----------------------------
-    // content area
+    // --- create the content area
     var contentArea = [[CPView alloc] initWithFrame:CGRectMake(150.0, 0.0, CGRectGetWidth([contentView bounds]) - 150.0, CGRectGetHeight([contentView bounds]))];
     
     [contentArea setBackgroundColor:[CPColor blueColor]];
