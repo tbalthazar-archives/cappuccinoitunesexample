@@ -34,7 +34,7 @@ var playlists = [
     var songsController     = [[SongsController alloc] init] ;
     
     
-    // --- create the navigation area
+    // --- create the navigation area 
     var navigationArea = [[CPView alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0, CGRectGetHeight([contentView bounds]) - 150.0)];
     [navigationArea setBackgroundColor:[CPColor redColor]];    
     [navigationArea setAutoresizingMask:CPViewHeightSizable | CPViewMaxXMargin];
